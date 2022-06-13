@@ -27,13 +27,22 @@ namespace CabInvoiceGenerator
 
         }
         public InvoiceSummary MultipleRides(Ride[] rides)
+        {
+            double result = 0;
+            foreach (var data in rides)
             {
-                double result = 0;
-                foreach (var data in rides)
-                {
-                    result += CalculateFare(data.distance, data.time);
-                }
-                return new InvoiceSummary(rides.Length, result);
+                result += CalculateFare(data.distance, data.time);
             }
+            return new InvoiceSummary(rides.Length, result);
+        }
+        public void MapUserId(string userId, Ride[] rides)
+        {
+            this.repo.Addrides(userId, rides);
+        }
+        public InvoiceSummary GetInvoiceSummary(string userId)
+        {
+            Ride[] result = this.repo.GetRides(userId);
+            return MultipleRides(result);
+        }
     }
 }
